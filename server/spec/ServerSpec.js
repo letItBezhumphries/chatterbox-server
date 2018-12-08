@@ -103,4 +103,33 @@ describe('Node Server Request Listener Function', function() {
     expect(res._ended).to.equal(true);
   });
 
+  // it('Should keep track of how many messages there are in the "results" array', function() {
+  //   var stubMsg = {
+  //     username: 'Jono',
+  //     text: 'Do my bidding!'
+  //   };
+  //   var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+  //   var res = new stubs.response();
+  //   handler.requestHandler(req, res);
+
+  //   req = new stubs.request('/classes/messages', 'POST', {username: 'felipe', text: 'Do Another bidding'});
+  //   res();
+  //   handler.requestHandler(req, res);
+
+  //   expect(res._responseCode).to.equal(201);
+  //   var messages = JSON.parse(res._data).results;
+  //   expect(messages.length).to.equal(2);
+  // });
+
+  // it('Should contain the same number of characters existent in the posted message', function() {
+  //   var stubMsg = {
+  //     username: 'Jono',
+  //     text: 'Do my bidding!'
+  //   };
+  //   var req = new stubs.request('/classes/messages', 'POST', stubMsg);
+  //   var res = new stubs.response();
+  //   handler.requestHandler(req, res);
+  //   expect(JSON.parse(res._data).text.length.to.equal(14));
+  // });
+
 });

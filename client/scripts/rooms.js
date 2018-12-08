@@ -6,4 +6,3 @@ var Rooms = {
   }
 };
 
-module.exports = Rooms;

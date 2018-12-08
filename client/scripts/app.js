@@ -30,12 +30,11 @@ var App = {
     //can use setInterval and polling to re-render updates
   },
 
-  fetch: function(callback = ()=>{}) {
+  fetch: function(callback = () => {}) {
     // examine the response from the server request:
     // refresh for new chat messages
     var findMessages = function(data) {
       $('#chats').empty();
-      console.log(data);
       var messageArr = data.results;
       // loop through the data
       for (var i = 0; i < messageArr.length; i++) {
@@ -62,8 +61,6 @@ var App = {
         }
         MessagesView.renderMessage(message);
         RoomsView.renderRoom(message.roomname);
-        
-        // Friends.toggleStatus(message.username);
 
       }
       callback();
@@ -86,4 +83,3 @@ var App = {
   }
 };
 
-module.exports = App;//

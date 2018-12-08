@@ -1,9 +1,8 @@
 var Parse = {
-
+  // `http://parse.${window.CAMPUS}.hackreactor.com/chatterbox/classes/messages`
   server: 'http://127.0.0.1:3000/classes/messages',
 
   create: function(message, successCB, errorCB = null) {
-    // todo: save a message to the server
     $.ajax({
       url: Parse.server,
       type: 'POST',
@@ -37,7 +36,6 @@ var Parse = {
         console.error('chatterbox: Failed to fetch messages', error);
       }
     });
-    // console.log(data)
   },
 
   getRoom: function(roomname, successCB, errorCB = null) {
@@ -57,7 +55,5 @@ var Parse = {
       }
     });
   }
-
 };
 
-module.exports = Parse;

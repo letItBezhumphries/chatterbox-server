@@ -1,121 +1,53 @@
-/*************************************************************
 
-You should implement your request handler function in this file.
-
-requestHandler is already getting passed to http.createServer()
-in basic-server.js, but it won't work as is.
-
-You'll have to figure out a way to export this function from
-this file and include it in basic-server.js so that it actually works.
-
-*Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
-
-**************************************************************/
-//var url = require('url');
-
-// var defaultCorsHeaders = {
-//   'access-control-allow-origin': '*',
-//   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-//   'access-control-allow-headers': 'content-type, accept',
-//   'access-control-max-age': 10 // Seconds.
-// };
-//var fs = require('fs');
-
-var storage = {};
-storage.results = [];
-
-var requestHandler = function(request, response) {
-  
-  const { method, url } = request;
-  let returnData;
-
-  if (url === '/classes/messages') {
-    if (method === 'GET') {
-      statusCode = 200;
-      returnData = storage;
-    }    
-  
-    var stringMessage = ''; 
-  
-    if (method === 'POST') {
-      
-      statusCode = 201;
-
-      request.on('data', function(chunk) {
-        stringMessage += chunk;
-      });
-      
-
-      request.on('end', () => {
-        stringMessage = JSON.parse(stringMessage);
-        returnData = stringMessage;
-        storage.results.push(stringMessage);
-        
-      });
-    }
-  } else {
-    statusCode = 404;
-  }
-
-  
-
-  // Request and Response come from node's http module.
-  //
-  // They include information about both the incoming request, such as
-  // headers and URL, and about the outgoing response, such as its status
-  // and content.
-  //
-  // Documentation for both request and response can be found in the HTTP section at
-  // http://nodejs.org/documentation/api/
-
-  // Do some basic logging.
-  //
-  // Adding more logging to your server can be an easy way to get passive
-  // debugging help, but you should always be careful about leaving stray
-  // console.logs in your code.
-  console.log('Serving request type ' + request.method + ' for url ' + request.url);
-  
-  // The outgoing status.
-  
-
-  // See the note below about CORS headers.
-  let headers = defaultCorsHeaders;
-
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'application/json';
-  
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
-
-  // Make sure to always call response.end() - Node may not send
-  // anything back to the client until you do. The string you pass to
-  // response.end() will be the body of the response - i.e. what shows
-  // up in the browser.
-  //
-  // Calling .end "flushes" the response's internal buffer, forcing
-  // node to actually send all the data over to the client.
-  
-  response.end(JSON.stringify(returnData));
-};
-
-// These headers will allow Cross-Origin Resource Sharing (CORS).
-// This code allows this server to talk to websites that
-// are on different domains, for instance, your chat client.
-//
-// Your chat client is running from a url like file://your/chat/client/index.html,
-// which is considered a different domain.
-//
-// Another way to get around this restriction is to serve you chat
-// client from this domain by setting up static file serving.
-var defaultCorsHeaders = {
+var headers = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
+  'access-control-max-age': 10, // Seconds.
+  'Content-Type': 'application/json'
+};
+
+var storage = {};  
+storage.results = [];
+
+//var messages = [{username: 'eric', text: 'this is my hello!', objectId: objectId}]
+
+
+var requestHandler = function(request, response) {  
+  console.log('Serving request type ' + request.method + ' for url ' + request.url);
+  
+  const { method, url } = request;
+  let returnData;
+  let baseUrl = url.split('?')[0];
+  
+  if (baseUrl === '/classes/messages') {
+    if (method === 'GET') {
+      statusCode = 200;
+      returnData = storage; //on GET the returnData will store all messages in results
+    }
+    if (method === 'POST') {
+      var stringMessage = ''; 
+      statusCode = 201;
+      request.on('data', function(chunk) {
+        stringMessage += chunk;
+      });
+      request.on('end', () => {
+        stringMessage = JSON.parse(stringMessage);
+        returnData = stringMessage; //on POST the returnData will grab just the one message
+        // stringMessage.objectId++;
+        storage.results.push(stringMessage);    
+      });
+    }  
+    if (method === 'OPTIONS') {
+      statusCode = 200;
+      response.writeHead(statusCode, headers);
+      response.end(null);
+    }  
+  } else {
+    statusCode = 404;
+  }
+  response.writeHead(statusCode, headers);
+  response.end(JSON.stringify(returnData));
 };
 
 module.exports.requestHandler = requestHandler;

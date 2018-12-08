@@ -3,5 +3,3 @@ var Messages = {
   text: 'text',
   roomname: 'roomname'
 };
-
-module.exports = Messages;

@@ -8,4 +8,3 @@ var MessageView = {
     `)
 };
 
-module.exports = MessageView;

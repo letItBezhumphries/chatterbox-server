@@ -9,6 +9,7 @@ var headers = {
 
 var storage = {};  
 storage.results = [];
+var objectId = 1;
 
 //var messages = [{username: 'eric', text: 'this is my hello!', objectId: objectId}]
 
@@ -33,8 +34,10 @@ var requestHandler = function(request, response) {
       });
       request.on('end', () => {
         stringMessage = JSON.parse(stringMessage);
-        returnData = stringMessage; //on POST the returnData will grab just the one message
-        // stringMessage.objectId++;
+        //on POST the returnData will grab just the one message
+        stringMessage.objectId = objectId;
+        returnData = stringMessage;
+        objectId++;
         storage.results.push(stringMessage);    
       });
     }  
